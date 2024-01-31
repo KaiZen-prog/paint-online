@@ -38,15 +38,21 @@ app.post('/image', (req, res) => {
 })
 
 app.get('/image', (req, res) => {
+    const imagePath = path.resolve(__dirname, 'files', `${req.query.id}.jpg`);
+
     try {
-        const file = fs.readFileSync(path.resolve(__dirname, 'files', `${req.query.id}.jpg`))
-        const data = `data:image/png;base64,` + file.toString('base64')
-        res.json(data)
+        if (fs.existsSync(imagePath)) {
+            const file = fs.readFileSync(imagePath);
+            const data = `data:image/png;base64,` + file.toString('base64');
+            res.json(data);
+        } else {
+            res.status(200).json('file not found');
+        }
     } catch (e) {
-        console.log(e)
-        return res.status(500).json('error')
+        console.error(e);
+        res.status(500).json('error');
     }
-})
+});
 
 app.listen(PORT, () => console.log(`server started on PORT ${PORT}`))
 

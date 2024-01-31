@@ -20,13 +20,15 @@ const Canvas = observer(() => {
     let ctx = canvasRef.current.getContext('2d')
     axios.get(`http://localhost:5000/image?id=${params.id}`)
         .then((response) => {
-          const img = new Image();
-          img.src = response.data;
+          if (response.data !== 'file not found') {
+            const img = new Image();
+            img.src = response.data;
 
-          img.onload = () => {
-            ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-            ctx.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
-            ctx.stroke();
+            img.onload = () => {
+              ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+              ctx.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+              ctx.stroke();
+            }
           }
         });
   }, []);
@@ -69,7 +71,8 @@ const Canvas = observer(() => {
         Brush.draw(ctx, figure.x, figure.y)
         break
       case "rect":
-        Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.color)
+        Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.color);
+        ctx.beginPath()
         break
       case "finish":
         ctx.beginPath()
@@ -79,8 +82,10 @@ const Canvas = observer(() => {
 
   const mouseDownHandler = () => {
     canvasState.pushToUndo(canvasRef.current.toDataURL());
-    axios.post(`http://localhost:5000/image?id=${params.id}`, {img: canvasRef.current.toDataURL()})
-      .then((response) => console.log(response));
+  }
+
+  const mouseUpHandler = () => {
+    axios.post(`http://localhost:5000/image?id=${params.id}`, {img: canvasRef.current.toDataURL()});
   }
 
   const connectHandler = () => {
@@ -105,6 +110,7 @@ const Canvas = observer(() => {
       </Modal>
       <canvas
         onMouseDown={() => mouseDownHandler()}
+        onMouseUp={() => mouseUpHandler()}
         ref={canvasRef}
         width={600}
         height={400}
