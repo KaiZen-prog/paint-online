@@ -19,6 +19,7 @@ app.ws('/', (ws, req) => {
                 connectionHandler(ws, msg)
                 break
             case "draw":
+                console.log(msg);
                 broadcastConnection(ws, msg)
                 break
         }
@@ -35,6 +36,7 @@ app.post('/image', (req, res) => {
         return res.status(500).json('error')
     }
 })
+
 app.get('/image', (req, res) => {
     try {
         const file = fs.readFileSync(path.resolve(__dirname, 'files', `${req.query.id}.jpg`))

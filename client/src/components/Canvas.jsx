@@ -7,6 +7,7 @@ import canvasState from '../store/canvasState';
 import toolState from '../store/toolState';
 import Brush from '../tools/Brush';
 import Rect from '../tools/Rect';
+import axios from 'axios';
 
 const Canvas = observer(() => {
   const canvasRef = useRef();
@@ -16,7 +17,18 @@ const Canvas = observer(() => {
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
-    toolState.setTool(new Brush(canvasRef.current));
+    let ctx = canvasRef.current.getContext('2d')
+    axios.get(`http://localhost:5000/image?id=${params.id}`)
+        .then((response) => {
+          const img = new Image();
+          img.src = response.data;
+
+          img.onload = () => {
+            ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            ctx.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+            ctx.stroke();
+          }
+        });
   }, []);
 
   useEffect(() => {
@@ -24,7 +36,8 @@ const Canvas = observer(() => {
       const socket = new WebSocket('ws://localhost:5000/');
       canvasState.setSocket(socket);
       canvasState.setSessionID(params.id);
-      
+      toolState.setTool(new Brush(canvasRef.current, socket, params.id))
+
       socket.onopen = () => {
         console.log('Подключение установлено');
         socket.send(JSON.stringify({
@@ -66,6 +79,8 @@ const Canvas = observer(() => {
 
   const mouseDownHandler = () => {
     canvasState.pushToUndo(canvasRef.current.toDataURL());
+    axios.post(`http://localhost:5000/image?id=${params.id}`, {img: canvasRef.current.toDataURL()})
+      .then((response) => console.log(response));
   }
 
   const connectHandler = () => {
