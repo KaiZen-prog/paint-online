@@ -1,6 +1,6 @@
 import Tool from './Tool';
 
-export default class Brush extends Tool{
+export default class Brush extends Tool {
   constructor(canvas, socket, sessionID) {
     super(canvas, socket, sessionID);
     this.listen();

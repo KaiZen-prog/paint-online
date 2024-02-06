@@ -7,8 +7,9 @@ import canvasState from '../store/canvasState';
 import toolState from '../store/toolState';
 import Brush from '../tools/Brush';
 import Rect from '../tools/Rect';
-import Line from '../tools/Line';
 import Circle from '../tools/Circle';
+import Eraser from '../tools/Eraser';
+import Line from '../tools/Line';
 import axios from 'axios';
 
 const Canvas = observer(() => {
@@ -70,7 +71,7 @@ const Canvas = observer(() => {
     const ctx = canvasRef.current.getContext('2d')
     switch (figure.type) {
       case "brush":
-        Brush.draw(ctx, figure.x, figure.y, figure.strokeColor)
+        Brush.draw(ctx, figure.x, figure.y, figure.strokeColor);
         break
       case "rect":
         Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.fillColor, figure.strokeColor);
@@ -79,6 +80,9 @@ const Canvas = observer(() => {
       case "circle":
         Circle.staticDraw(ctx, figure.x, figure.y, figure.radius, figure.fillColor, figure.strokeColor);
         ctx.beginPath()
+        break
+      case "eraser":
+        Eraser.draw(ctx, figure.x, figure.y);
         break
       case "line":
         Line.draw(ctx, figure.startX, figure.startY, figure.endX, figure.endY, figure.fillColor, figure.strokeColor);
