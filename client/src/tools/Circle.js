@@ -20,10 +20,9 @@ export default class Circle extends Tool {
       id: this.sessionID,
       figure: {
         type: 'circle',
-        x: this.startX,
-        y: this.startY,
+        x: this.centerX,
+        y: this.centerY,
         radius: this.radius,
-        height: this.height,
         fillColor: this.ctx.fillStyle,
         strokeColor: this.ctx.strokeStyle
       }
@@ -46,11 +45,11 @@ export default class Circle extends Tool {
       let deltaX = currentX - this.startX;
       let deltaY = currentY - this.startY;
 
-      let centerX = this.startX + deltaX / 2;
-      let centerY = this.startY + deltaY / 2;
+      this.centerX = this.startX + deltaX / 2;
+      this.centerY = this.startY + deltaY / 2;
 
       this.radius = Math.sqrt(deltaX**2 + deltaY**2) / 2;
-      this.draw(centerX, centerY, this.radius);
+      this.draw(this.centerX, this.centerY, this.radius);
     }
   }
 
@@ -69,6 +68,8 @@ export default class Circle extends Tool {
   }
 
   static staticDraw(ctx, x, y, radius, fillColor, strokeColor) {
+    const buffFillStyle = ctx.fillStyle;
+    const buffStrokeStyle = ctx.strokeStyle;
     ctx.fillStyle = fillColor;
     ctx.strokeStyle = strokeColor;
 
@@ -76,5 +77,8 @@ export default class Circle extends Tool {
     ctx.arc(x, y, radius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.stroke();
+
+    ctx.fillStyle = buffFillStyle;
+    ctx.strokeStyle = buffStrokeStyle;
   }
 };

@@ -76,12 +76,12 @@ const Canvas = observer(() => {
         Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.fillColor, figure.strokeColor);
         ctx.beginPath()
         break
-      case "line":
-        Line.draw(ctx, figure.startX, figure.startY, figure.endX, figure.endY, figure.fillColor, figure.strokeColor);
+      case "circle":
+        Circle.staticDraw(ctx, figure.x, figure.y, figure.radius, figure.fillColor, figure.strokeColor);
         ctx.beginPath()
         break
-      case "circle":
-        Circle.staticDraw(ctx, figure.x, figure.y, figure.radius, figure.height, figure.fillColor, figure.strokeColor);
+      case "line":
+        Line.draw(ctx, figure.startX, figure.startY, figure.endX, figure.endY, figure.fillColor, figure.strokeColor);
         ctx.beginPath()
         break
       case "finish":
