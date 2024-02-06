@@ -63,6 +63,8 @@ export default class Rect extends Tool {
   }
 
   static staticDraw(ctx, x, y, w, h, fillColor, strokeColor) {
+    const buffFillStyle = ctx.fillStyle;
+    const buffStrokeStyle = ctx.strokeStyle;
     ctx.fillStyle = fillColor;
     ctx.strokeStyle = strokeColor;
 
@@ -70,5 +72,8 @@ export default class Rect extends Tool {
     ctx.rect(x, y, w, h);
     ctx.fill();
     ctx.stroke();
+
+    ctx.fillStyle = buffFillStyle;
+    ctx.strokeStyle = buffStrokeStyle;
   }
 };
