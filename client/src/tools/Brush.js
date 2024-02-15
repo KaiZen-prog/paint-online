@@ -42,19 +42,23 @@ export default class Brush extends Tool {
           type: 'brush',
           x: x,
           y: y,
-          strokeColor: this.ctx.strokeStyle
+          strokeColor: this.ctx.strokeStyle,
+          lineWidth: this.ctx.lineWidth
         }
       }))
     }
   }
 
-  static draw(ctx, x, y, strokeColor) {
+  static draw(ctx, x, y, strokeColor, lineWidth) {
+    const buffLineWidth = ctx.lineWidth;
     const buffStrokeStyle = ctx.strokeStyle;
+    ctx.lineWidth = lineWidth;
     ctx.strokeStyle = strokeColor;
 
     ctx.lineTo(x, y);
     ctx.stroke();
 
+    ctx.lineWidth = buffLineWidth;
     ctx.strokeStyle = buffStrokeStyle;
   }
 };

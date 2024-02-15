@@ -17,19 +17,23 @@ export default class Eraser extends Brush {
           type: 'eraser',
           x: x,
           y: y,
-          strokeColor: '#ffffff'
+          strokeColor: '#ffffff',
+          lineWidth: this.ctx.lineWidth
         }
       }))
     }
   }
 
-  static draw(ctx, x, y) {
+  static draw(ctx, x, y, lineWidth) {
+    const buffLineWidth = ctx.lineWidth;
     const buffStrokeStyle = ctx.strokeStyle;
+    ctx.lineWidth = lineWidth;
     ctx.strokeStyle = '#ffffff';
 
     ctx.lineTo(x, y);
     ctx.stroke();
 
+    ctx.lineWidth = buffLineWidth;
     ctx.strokeStyle = buffStrokeStyle;
   }
 };

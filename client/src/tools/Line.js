@@ -25,7 +25,8 @@ export default class Line extends Tool {
         endX: this.currentX,
         endY: this.currentY,
         fillColor: this.ctx.fillStyle,
-        strokeColor: this.ctx.strokeStyle
+        strokeColor: this.ctx.strokeStyle,
+        lineWidth: this.ctx.lineWidth
       }
     }))
   }
@@ -62,13 +63,21 @@ export default class Line extends Tool {
     }.bind(this);
   }
 
-  static draw(ctx, startX, startY, endX, endY, fillColor, strokeColor) {
-    ctx.fillStyle= fillColor;
+  static draw(ctx, startX, startY, endX, endY, fillColor, strokeColor, lineWidth) {
+    const buffLineWidth = ctx.lineWidth;
+    const buffFillStyle = ctx.fillStyle;
+    const buffStrokeStyle = ctx.strokeStyle;
+    ctx.lineWidth = lineWidth;
+    ctx.fillStyle = fillColor;
     ctx.strokeStyle = strokeColor;
 
     ctx.beginPath();
     ctx.moveTo(startX, startY );
     ctx.lineTo(endX, endY);
     ctx.stroke();
+
+    ctx.lineWidth = buffLineWidth;
+    ctx.fillStyle = buffFillStyle;
+    ctx.strokeStyle = buffStrokeStyle;
   }
 };

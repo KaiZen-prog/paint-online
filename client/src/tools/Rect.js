@@ -25,7 +25,8 @@ export default class Rect extends Tool {
         width: this.width,
         height: this.height,
         fillColor: this.ctx.fillStyle,
-        strokeColor: this.ctx.strokeStyle
+        strokeColor: this.ctx.strokeStyle,
+        lineWidth: this.ctx.lineWidth
       }
     }))
   }
@@ -62,9 +63,11 @@ export default class Rect extends Tool {
     }
   }
 
-  static staticDraw(ctx, x, y, w, h, fillColor, strokeColor) {
+  static staticDraw(ctx, x, y, w, h, fillColor, strokeColor, lineWidth) {
+    const buffLineWidth = ctx.lineWidth;
     const buffFillStyle = ctx.fillStyle;
     const buffStrokeStyle = ctx.strokeStyle;
+    ctx.lineWidth = lineWidth;
     ctx.fillStyle = fillColor;
     ctx.strokeStyle = strokeColor;
 
@@ -73,6 +76,7 @@ export default class Rect extends Tool {
     ctx.fill();
     ctx.stroke();
 
+    ctx.lineWidth = buffLineWidth;
     ctx.fillStyle = buffFillStyle;
     ctx.strokeStyle = buffStrokeStyle;
   }
